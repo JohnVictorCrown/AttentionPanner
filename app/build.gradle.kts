@@ -1,19 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.jv.attentionpanner"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.jv.attentionpanner"
-        minSdk = 31
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 33
+        targetSdk = 37
+        versionCode = 2
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
@@ -44,9 +43,8 @@ android {
             )
         }
         debug {
-            // Optimization for Debug builds (keep enabled for small size)
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -54,35 +52,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
     }
 }
 
-// --- LOGIC: FORCE AAPT2 ONLY ON PHONE ---
-// Check if we are running on GitHub Actions (CI)
-val isRunningOnCI = System.getenv("CI") == "true"
-
-// Only apply the Linux-ARM64 fix if we are NOT on a CI server (meaning we are on the phone)
-if (!isRunningOnCI) {
-    configurations.all {
-        resolutionStrategy.eachDependency {
-            if (requested.group == "com.android.tools.build" && requested.name == "aapt2") {
-                useTarget("com.android.tools.build:aapt2:8.9.2-12782657:linux-aarch64")
-            }
-        }
-    }
-}
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     
     implementation(platform(libs.androidx.compose.bom))

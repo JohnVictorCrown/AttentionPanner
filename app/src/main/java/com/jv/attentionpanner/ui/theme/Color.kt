@@ -1,4 +1,4 @@
-package ok.ok.ok.ui.theme
+package com.jv.attentionpanner.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
