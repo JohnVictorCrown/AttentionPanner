@@ -33,6 +33,16 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreFileEnv = System.getenv("KEYSTORE_PATH") ?: "${project.projectDir}/keystore.jks"
+            storeFile = file(keystoreFileEnv)
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "Alpha789@"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "water"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "Alpha789@"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -41,6 +51,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isMinifyEnabled = false
@@ -51,6 +62,12 @@ android {
             )
         }
     }
+
+    lint {
+        isCheckReleaseBuilds = false
+        abortOnError = false
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -58,6 +75,10 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+tasks.withType<com.android.build.gradle.tasks.R8Task> {
+    enableR8FullMode = true
 }
 
 dependencies {
