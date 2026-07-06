@@ -64,7 +64,6 @@ android {
     }
 
     lint {
-        isCheckReleaseBuilds = false
         abortOnError = false
     }
 
@@ -75,10 +74,6 @@ android {
     buildFeatures {
         compose = true
     }
-}
-
-tasks.withType<com.android.build.gradle.tasks.R8Task> {
-    enableR8FullMode = true
 }
 
 dependencies {
